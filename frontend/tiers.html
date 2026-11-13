@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MvLO Ranked — Tier Map</title>
+<meta name="description" content="Every rank on the MvLO Ranked ladder — Mini, Mushroom, Shell, Fireflower and Star — with the exact ELO range each tier and division covers.">
+<link rel="canonical" href="https://mvloranked.xyz/tiers.html">
+<!-- Link preview card (Discord, Twitter/X, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MvLO Ranked">
+<meta property="og:title" content="MvLO Ranked — Tier Map">
+<meta property="og:description" content="Every rank on the MvLO Ranked ladder — Mini, Mushroom, Shell, Fireflower and Star — with the exact ELO range each tier and division covers.">
+<meta property="og:url" content="https://mvloranked.xyz/tiers.html">
+<meta property="og:image" content="https://mvloranked.xyz/assets/og-banner.png">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MvLO Ranked — Tier Map">
+<meta name="twitter:description" content="Every rank on the MvLO Ranked ladder — Mini, Mushroom, Shell, Fireflower and Star — with the exact ELO range each tier and division covers.">
+<meta name="twitter:image" content="https://mvloranked.xyz/assets/og-banner.png">
+<!-- Empty = same origin (dev). On Vercel, point this at the deployed API host. -->
+<meta name="mvlo-api-base" content="">
+<link rel="stylesheet" href="css/style.css">
+<!-- Hides the page until js/gate.js (loaded below) confirms access; see docs/site-gate.md -->
+<style>body{visibility:hidden}</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mvloranked.xyz/" },
+    { "@type": "ListItem", "position": 2, "name": "Tier Map", "item": "https://mvloranked.xyz/tiers.html" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<div style="min-height:100vh;position:relative;overflow:hidden;padding-bottom:132px;background:linear-gradient(#4a7bf0 0%,#5c94fc 40%,#8fc2ff 100%)">
+
+  <div style="position:absolute;top:54px;left:0;width:100%;height:240px;overflow:hidden;pointer-events:none">
+    <div style="position:absolute;top:0;left:0;width:132px;height:48px;background:#fff;box-shadow:36px -18px 0 0 #fff,78px 0 0 -6px #fff,0 18px 0 0 #fff;animation:drift 58s linear infinite"></div>
+    <div style="position:absolute;top:150px;left:0;width:96px;height:36px;background:#fff;box-shadow:30px -14px 0 0 #fff,58px 0 0 -5px #fff;animation:drift 92s linear infinite;animation-delay:-44s"></div>
+  </div>
+
+  <div style="position:absolute;bottom:0;left:0;width:100%;height:118px;pointer-events:none">
+    <div style="position:absolute;bottom:64px;left:0;width:100%;height:66px;background-image:url('assets/qblock.png'),url('assets/qblock.png'),url('assets/qblock.png');background-repeat:no-repeat;background-size:54px 66px;background-position:14% bottom,50% bottom,86% bottom"></div>
+    <div style="position:absolute;bottom:0;left:0;width:100%;height:64px;background:linear-gradient(#63c74d 0 10px,#3a9c34 10px 20px,#7a4a1e 20px,#5a3413 100%);border-top:5px solid #17161d;box-shadow:inset 0 24px 0 -18px #ffffff40"></div>
+  </div>
+
+  <div style="position:relative;max-width:1080px;margin:0 auto;padding:34px 18px 0">
+
+    <header style="margin-bottom:22px">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/" class="back-link">◄ BACK</a>
+        <span class="breadcrumb-current" aria-current="page">TIER MAP</span>
+      </nav>
+      <a id="nav-discord-invite" class="discord-link" style="margin-left:8px" href="#" hidden target="_blank" rel="noopener noreferrer">JOIN DISCORD</a>
+      <h1 style="margin:14px 0 0;font:clamp(36px,6.4vw,68px)/1 'MarioUI';color:#fff;letter-spacing:2px;text-shadow:5px 5px 0 #17161d,10px 10px 0 rgba(23,22,29,.28)">TIER MAP</h1>
+      <p style="margin:16px 0 0;font:18px/1.5 'MarioUI';color:#fff;max-width:46ch;text-shadow:3px 3px 0 #17161d">EVERY RANK AND THE ELO IT TAKES TO GET THERE.</p>
+    </header>
+
+    <main style="background:#fdf3d7;border:5px solid #17161d;box-shadow:inset 0 0 0 4px #fff,10px 10px 0 rgba(23,22,29,.32);padding:24px;position:relative;z-index:2">
+
+      <section id="you-are-here" style="margin-bottom:24px"></section>
+
+      <section style="margin-bottom:26px">
+        <h2 style="margin:0 0 4px;font:22px 'MarioUI';color:#17161d;letter-spacing:1px">THE WHOLE LADDER</h2>
+        <p style="margin:0 0 14px;font:15px 'MarioUI';color:#8b7a4e">Segment width is proportional to how much ELO the tier covers.</p>
+        <div id="tier-scale"></div>
+      </section>
+
+      <section>
+        <h2 style="margin:0 0 4px;font:22px 'MarioUI';color:#17161d;letter-spacing:1px">TIER BY TIER</h2>
+        <p style="margin:0 0 14px;font:15px 'MarioUI';color:#8b7a4e">Each tier splits into three divisions. Division 1 is the entry point, division 3 is the doorstep of the next tier.</p>
+        <div id="tier-list" style="display:flex;flex-direction:column;gap:14px"></div>
+      </section>
+
+    </main>
+
+    <p style="margin:18px 0 0;font:15px 'MarioUI';color:#fff;text-shadow:3px 3px 0 #17161d">UNOFFICIAL COMMUNITY PROJECT. RANK BOUNDARIES MAY CHANGE BETWEEN SEASONS.</p>
+  </div>
+</div>
+
+<div id="auth-error" hidden></div>
+
+<script src="js/tiers.js"></script>
+<script src="js/ladder-render.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/gate.js"></script>
+<script src="js/tier-map.js"></script>
+</body>
+</html>

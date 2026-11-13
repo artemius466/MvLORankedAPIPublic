@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+
+# Local editor / agent settings - never part of the repo.
+.claude/
+.DS_Store
+
+# Reproduced exactly from package-lock.json by "npm ci" - the Dockerfile
+# already runs it and .dockerignore excludes this directory from the build
+# context, so nothing deployed ever read the committed copy.
+node_modules/

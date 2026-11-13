@@ -1,0 +1,51 @@
+services:
+  api:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      # Overrides whatever is in .env so the app always talks to the
+      # in-network service names/ports, regardless of the dev-oriented
+      # localhost values .env may still contain.
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgres://mvlo:${POSTGRES_PASSWORD:-mvlo}@postgres:5432/mvlo_ranked
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mvlo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mvlo}
+      POSTGRES_DB: mvlo_ranked
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mvlo -d mvlo_ranked"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
+  redisdata:

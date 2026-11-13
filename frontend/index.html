@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MvLO Ranked</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Live leaderboard, ELO ratings and ranked matchmaking rules for MvLO (Mario vs Luigi Online) — an unofficial, community-run competitive ladder.">
+<link rel="canonical" href="https://mvloranked.xyz/">
+<!-- Link preview card (Discord, Twitter/X, etc.). assets/og-banner.png is
+     assets/logo.png flattened onto the site's own background color (#5c94fc). -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MvLO Ranked">
+<meta property="og:title" content="MvLO Ranked">
+<meta property="og:description" content="Live leaderboard, ELO ratings and ranked matchmaking rules for MvLO (Mario vs Luigi Online) — an unofficial, community-run competitive ladder.">
+<meta property="og:url" content="https://mvloranked.xyz/">
+<meta property="og:image" content="https://mvloranked.xyz/assets/og-banner.png">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MvLO Ranked">
+<meta name="twitter:description" content="Live leaderboard, ELO ratings and ranked matchmaking rules for MvLO (Mario vs Luigi Online) — an unofficial, community-run competitive ladder.">
+<meta name="twitter:image" content="https://mvloranked.xyz/assets/og-banner.png">
+<!-- Empty = same origin (dev). On Vercel, point this at the deployed API host. -->
+<meta name="mvlo-api-base" content="">
+<link rel="stylesheet" href="css/style.css">
+<!-- Hides the page until js/gate.js (loaded below) confirms access; see docs/site-gate.md -->
+<style>body{visibility:hidden}</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MvLO Ranked",
+  "url": "https://mvloranked.xyz/",
+  "description": "Community-made ranked matchmaking, ELO leaderboard and tier ladder for Mario vs Luigi Online."
+}
+</script>
+</head>
+<body>
+
+<div style="min-height:100vh;position:relative;overflow:hidden;padding-bottom:132px;background:linear-gradient(#4a7bf0 0%,#5c94fc 40%,#8fc2ff 100%)">
+
+  <div style="position:absolute;top:54px;left:0;width:100%;height:240px;overflow:hidden;pointer-events:none">
+    <div style="position:absolute;top:0;left:0;width:132px;height:48px;background:#fff;box-shadow:36px -18px 0 0 #fff,78px 0 0 -6px #fff,0 18px 0 0 #fff;animation:drift 58s linear infinite"></div>
+    <div style="position:absolute;top:150px;left:0;width:96px;height:36px;background:#fff;box-shadow:30px -14px 0 0 #fff,58px 0 0 -5px #fff;animation:drift 92s linear infinite;animation-delay:-44s"></div>
+  </div>
+
+  <div style="position:absolute;bottom:0;left:0;width:100%;height:118px;pointer-events:none">
+    <div style="position:absolute;bottom:64px;left:0;width:100%;height:66px;background-image:url('assets/qblock.png'),url('assets/qblock.png'),url('assets/qblock.png');background-repeat:no-repeat;background-size:54px 66px;background-position:14% bottom,50% bottom,86% bottom"></div>
+    <div style="position:absolute;bottom:0;left:0;width:100%;height:64px;background:linear-gradient(#63c74d 0 10px,#3a9c34 10px 20px,#7a4a1e 20px,#5a3413 100%);border-top:5px solid #17161d;box-shadow:inset 0 24px 0 -18px #ffffff40"></div>
+  </div>
+
+  <div style="position:relative;max-width:1080px;margin:0 auto;padding:34px 18px 0">
+
+    <header style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end;justify-content:space-between;margin-bottom:22px">
+      <div>
+        <h1 style="margin:0"><img src="assets/logo.png" alt="Mario vs Luigi Ranked" style="display:block;width:clamp(160px,20vw,260px);max-width:100%;image-rendering:auto;filter:drop-shadow(3px 3px 0 #17161d) drop-shadow(6px 6px 0 rgba(23,22,29,.28))"></h1>
+        <p style="margin:16px 0 0;font:18px/1.5 'MarioUI';color:#fff;max-width:40ch;text-shadow:3px 3px 0 #17161d">COMMUNITY-MADE RANKED MATCHES</p>
+        <a href="tiers.html" class="map-link" style="margin-top:16px">TIER MAP</a>
+        <a id="nav-discord-invite" class="discord-link" style="margin-top:16px;margin-left:8px" href="#" hidden target="_blank" rel="noopener noreferrer">JOIN DISCORD</a>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+        <div id="online-badge" style="display:inline-flex;align-items:center;gap:8px;background:#17161d;border:4px solid #fff;padding:5px 14px 5px 10px"></div>
+        <div style="background:#fdf3d7;border:5px solid #17161d;box-shadow:inset 0 0 0 4px #fff,9px 9px 0 rgba(23,22,29,.32);padding:14px 16px;min-width:268px;max-width:330px">
+          <div id="user-card" style="min-height:118px"></div>
+        </div>
+      </div>
+    </header>
+
+    <nav style="display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end;position:relative;z-index:3;padding-left:8px">
+      <button id="tab-board" class="tab-btn" data-tab="board">
+        LEADERBOARD<span class="tab-badge"></span>
+      </button>
+      <button id="tab-announcements" class="tab-btn" data-tab="announcements">
+        ANNOUNCEMENTS<span class="tab-badge"></span>
+      </button>
+      <button id="tab-rules" class="tab-btn" data-tab="rules">
+        RULES<span class="tab-badge"></span>
+      </button>
+      <button id="tab-history" class="tab-btn" data-tab="history">
+        HISTORY<span class="tab-badge"></span>
+      </button>
+    </nav>
+
+    <main style="background:#fdf3d7;border:5px solid #17161d;box-shadow:inset 0 0 0 4px #fff,10px 10px 0 rgba(23,22,29,.32);padding:24px;position:relative;z-index:2">
+
+      <section id="panel-board">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <h2 style="margin:0;font:30px 'MarioUI';color:#17161d;letter-spacing:1px">TOP PLAYERS</h2>
+          </div>
+        </div>
+
+        <div id="board-list" style="display:flex;flex-direction:column;gap:8px"></div>
+        <p id="board-summary" style="margin:16px 0 0;font:15px 'MarioUI';color:#8b7a4e"></p>
+        <div id="board-pager" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;margin-top:14px"></div>
+      </section>
+
+      <section id="panel-announcements" hidden>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h2 style="margin:0;font:30px 'MarioUI';color:#17161d;letter-spacing:1px">ANNOUNCEMENTS</h2>
+          <span id="announcements-summary" style="background:#17161d;color:#fdf3d7;padding:6px 12px;font:15px 'MarioUI'"></span>
+        </div>
+        <div id="announcements-list" style="display:flex;flex-direction:column;gap:16px"></div>
+      </section>
+
+      <section id="panel-rules" hidden>
+        <h2 style="margin:0 0 8px;font:30px 'MarioUI';color:#17161d;letter-spacing:1px">RULESET</h2>
+        <p style="margin:0 0 20px;font:16px 'MarioUI';color:#4c4634">Version 1.0.0. Effective for all ranked matches</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(262px,1fr));gap:14px">
+          <div style="border:4px solid #17161d;background:#fff;box-shadow:6px 6px 0 rgba(23,22,29,.25);padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <h3 style="margin:0;font:20px 'MarioUI';color:#17161d">1. Match rules</h3>
+            </div>
+            <p style="margin:0;font:15px/1.6 'MarioUI';color:#4c4634;text-wrap:pretty">
+        Coins For Powerup: 8<br>
+        Custom Powerups: Enabled<br>
+        Teams: Disabled<br>
+        Lives: Disabled<br>
+        Stars To Win: 15<br>
+        Timer: 10 minutes</p>
+          </div>
+          <div style="border:4px solid #17161d;background:#fff;box-shadow:6px 6px 0 rgba(23,22,29,.25);padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <h3 style="margin:0;font:20px 'MarioUI';color:#17161d">2. Maps</h3>
+            </div>
+            <p style="margin:0;font:15px/1.6 'MarioUI';color:#4c4634;text-wrap:pretty">There are 4 ranked maps (Grass, Jungle, Bricks, Desert). Once a match is found and both players accept, a randomly picked host bans 2 of them, then the other player bans 1 more — whichever map is left is the one you play.</p>
+          </div>
+          <div style="border:4px solid #17161d;background:#fff;box-shadow:6px 6px 0 rgba(23,22,29,.25);padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <h3 style="margin:0;font:20px 'MarioUI';color:#17161d">3. Disconnects</h3>
+            </div>
+            <p style="margin:0;font:15px/1.6 'MarioUI';color:#4c4634;text-wrap:pretty">Once you're in a room, you cannot disconnect without losing ELO points. It's scored as a loss for you, if you left the game after accepting a match. Bad or unstable internet is not our problem and we will not revert match results since you can't even prove that it was an internet problem.</p>
+          </div>
+          <div style="border:4px solid #17161d;background:#fff;box-shadow:6px 6px 0 rgba(23,22,29,.25);padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <h3 style="margin:0;font:20px 'MarioUI';color:#17161d">4. Rating</h3>
+            </div>
+            <p style="margin:0;font:15px/1.6 'MarioUI';color:#4c4634;text-wrap:pretty">Rating is one shared number across every ranked match. We use a modern rating system similar to what other competitive games use nowadays, which looks at more than just wins and losses to figure out how confident it is in your rank. Because of this, newer or less active players can see bigger swings until the system has a good read on their skill, while established players move more gradually. Beating opponents above your rating is worth more than beating ones below it. The <a href="tiers.html">tier map</a> lists the rating each rank needs.</p>
+          </div>
+          <div style="border:4px solid #17161d;background:#fff;box-shadow:6px 6px 0 rgba(23,22,29,.25);padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <h3 style="margin:0;font:20px 'MarioUI';color:#17161d">5. Fair play</h3>
+            </div>
+            <p style="margin:0;font:15px/1.6 'MarioUI';color:#4c4634;text-wrap:pretty">Cheats, or third-party software or hardware that gives a clear unfair edge, exploiting bugs or glitches for an advantage is forbidden</p>
+          </div>
+          <div style="border:4px solid #17161d;background:#fff;box-shadow:6px 6px 0 rgba(23,22,29,.25);padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <h3 style="margin:0;font:20px 'MarioUI';color:#17161d">6. Account integrity</h3>
+            </div>
+            <p style="margin:0;font:15px/1.6 'MarioUI';color:#4c4634;text-wrap:pretty">Rank manipulation (alt accounts to play below your skill, boosting, or deliberately deranking, account sharing and bots) is forbidden.</p>
+          </div>
+          <div style="border:4px solid #17161d;background:#fff;box-shadow:6px 6px 0 rgba(23,22,29,.25);padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <h3 style="margin:0;font:20px 'MarioUI';color:#17161d">7. Match integrity</h3>
+            </div>
+            <p style="margin:0;font:15px/1.6 'MarioUI';color:#4c4634;text-wrap:pretty">Match fixing and win trading. Stream sniping off an opponent's live broadcast. Queue dodging.</p>
+          </div>
+        </div>
+        <div style="margin-top:18px;border:4px solid #17161d;padding:14px 16px;background:#ffe9a8;box-shadow:6px 6px 0 rgba(23,22,29,.25)">
+          <p style="margin:0;font:15px/1.6 'MarioUI';color:#5b4408">Any violation of rules 5–7 is a ban. We can see the logs. Please do not test this.</p>
+        </div>
+        <div style="margin-top:10px;border:4px solid #17161d;padding:14px 16px;background:#ffe9a8;box-shadow:6px 6px 0 rgba(23,22,29,.25)">
+          <p style="margin:0;font:15px/1.6 'MarioUI';color:#5b4408">Disputes go in the Discord ticket channel with a match id attached. You can get it at match history.</p>
+        </div>
+      </section>
+
+      <section id="panel-history" hidden>
+        <div id="history-gate" class="auth-gate" hidden>
+          <span class="auth-gate-icon"></span>
+          <h2 style="margin:0;font:26px 'MarioUI';color:#17161d;letter-spacing:1px">LOGIN REQUIRED</h2>
+          <p style="margin:0;font:16px/1.5 'MarioUI';color:#4c4634;max-width:36ch">Your match history is tied to your Discord account. Log in to see it.</p>
+          <button class="discord-btn" data-login>LOGIN WITH DISCORD</button>
+        </div>
+
+        <div id="history-content">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h2 style="margin:0;font:30px 'MarioUI';color:#17161d;letter-spacing:1px">MATCH HISTORY</h2>
+          <span id="history-summary" style="background:#17161d;color:#fdf3d7;padding:6px 12px;font:15px 'MarioUI'"></span>
+        </div>
+        <div id="history-list" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <p style="margin:18px 0 0;font:15px 'MarioUI';color:#fff;text-shadow:3px 3px 0 #17161d">UNOFFICIAL COMMUNITY PROJECT.</p>
+  </div>
+
+<div id="auth-error" hidden></div>
+
+<script src="js/tiers.js"></script>
+<script src="js/countries.js"></script>
+<script src="js/map-names.js"></script>
+<script src="js/match-detail.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/gate.js"></script>
+<script src="js/profile-settings.js"></script>
+<script src="js/markdown.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

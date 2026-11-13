@@ -1,0 +1,31 @@
+{
+  "name": "mariovsluigirankedapi",
+  "version": "1.0.0",
+  "author": "artemius466",
+  "description": "",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --env-file=.env --watch server.js",
+    "db:start": "./start-psql-dev.sh",
+    "db:stop": "./start-psql-dev.sh stop",
+    "db:reset": "./start-psql-dev.sh reset",
+    "db:psql": "./start-psql-dev.sh psql",
+    "db:migrate": "node --env-file=.env node_modules/node-pg-migrate/bin/node-pg-migrate.js up",
+    "db:migrate:down": "node --env-file=.env node_modules/node-pg-migrate/bin/node-pg-migrate.js down",
+    "db:migrate:new": "node --env-file=.env node_modules/node-pg-migrate/bin/node-pg-migrate.js create -j sql --migration-filename-format index",
+    "redis:start": "./start-redis-dev.sh",
+    "redis:stop": "./start-redis-dev.sh stop",
+    "redis:reset": "./start-redis-dev.sh reset",
+    "redis:cli": "./start-redis-dev.sh cli"
+  },
+  "dependencies": {
+    "discord.js": "^14.27.0",
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2",
+    "node-pg-migrate": "^9.0.0",
+    "pg": "^8.22.0",
+    "redis": "^6.2.0"
+  }
+}

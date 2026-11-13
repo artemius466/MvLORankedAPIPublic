@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Player Profile — MvLO Ranked</title>
+<meta name="description" content="View a player's rank, ELO rating and match history on the MvLO Ranked ladder.">
+<!-- This page is served for any /user/:id, so every relative URL below must
+     resolve against the site root rather than the current (dynamic) path. -->
+<base href="/">
+<!-- Placeholder - js/user.js overwrites this with the real https://mvloranked.xyz/user/:id
+     once it reads the id out of the URL, since this same static file is served for every id. -->
+<link rel="canonical" href="https://mvloranked.xyz/">
+<!-- Link preview card (Discord, Twitter/X, etc.). Like the title/description
+     above, this is a generic placeholder - a link unfurler never runs
+     js/user.js, so it never sees the per-player og:title/og:description that
+     setProfileSeo() sets there; only the image is meaningfully static. -->
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="MvLO Ranked">
+<meta property="og:title" content="Player Profile — MvLO Ranked">
+<meta property="og:description" content="View a player's rank, ELO rating and match history on the MvLO Ranked ladder.">
+<meta property="og:url" content="https://mvloranked.xyz/">
+<meta property="og:image" content="https://mvloranked.xyz/assets/og-banner.png">
+<meta property="og:image:width" content="1920">
+<meta property="og:image:height" content="1080">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Player Profile — MvLO Ranked">
+<meta name="twitter:description" content="View a player's rank, ELO rating and match history on the MvLO Ranked ladder.">
+<meta name="twitter:image" content="https://mvloranked.xyz/assets/og-banner.png">
+<!-- Empty = same origin (dev). On Vercel, point this at the deployed API host. -->
+<meta name="mvlo-api-base" content="">
+<link rel="stylesheet" href="css/style.css">
+<!-- Hides the page until js/gate.js (loaded below) confirms access; see docs/site-gate.md -->
+<style>body{visibility:hidden}</style>
+<script type="application/ld+json" id="ld-breadcrumb">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://mvloranked.xyz/" },
+    { "@type": "ListItem", "position": 2, "name": "Player Profile", "item": "https://mvloranked.xyz/" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<div style="min-height:100vh;position:relative;overflow:hidden;padding-bottom:132px;background:linear-gradient(#4a7bf0 0%,#5c94fc 40%,#8fc2ff 100%)">
+
+  <div style="position:absolute;top:54px;left:0;width:100%;height:240px;overflow:hidden;pointer-events:none">
+    <div style="position:absolute;top:0;left:0;width:132px;height:48px;background:#fff;box-shadow:36px -18px 0 0 #fff,78px 0 0 -6px #fff,0 18px 0 0 #fff;animation:drift 58s linear infinite"></div>
+    <div style="position:absolute;top:150px;left:0;width:96px;height:36px;background:#fff;box-shadow:30px -14px 0 0 #fff,58px 0 0 -5px #fff;animation:drift 92s linear infinite;animation-delay:-44s"></div>
+  </div>
+
+  <div style="position:absolute;bottom:0;left:0;width:100%;height:118px;pointer-events:none">
+    <div style="position:absolute;bottom:64px;left:0;width:100%;height:66px;background-image:url('assets/qblock.png'),url('assets/qblock.png'),url('assets/qblock.png');background-repeat:no-repeat;background-size:54px 66px;background-position:14% bottom,50% bottom,86% bottom"></div>
+    <div style="position:absolute;bottom:0;left:0;width:100%;height:64px;background:linear-gradient(#63c74d 0 10px,#3a9c34 10px 20px,#7a4a1e 20px,#5a3413 100%);border-top:5px solid #17161d;box-shadow:inset 0 24px 0 -18px #ffffff40"></div>
+  </div>
+
+  <div style="position:relative;max-width:1080px;margin:0 auto;padding:34px 18px 0">
+
+    <header style="margin-bottom:22px">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/" class="back-link">◄ BACK</a>
+        <span id="breadcrumb-current" class="breadcrumb-current" aria-current="page">PLAYER PROFILE</span>
+      </nav>
+      <a id="nav-discord-invite" class="discord-link" style="margin-left:8px" href="#" hidden target="_blank" rel="noopener noreferrer">JOIN DISCORD</a>
+      <h1 id="profile-h1" style="margin:14px 0 0;font:clamp(36px,6.4vw,68px)/1 'MarioUI';color:#fff;letter-spacing:2px;text-shadow:5px 5px 0 #17161d,10px 10px 0 rgba(23,22,29,.28)">PLAYER PROFILE</h1>
+    </header>
+
+    <main style="background:#fdf3d7;border:5px solid #17161d;box-shadow:inset 0 0 0 4px #fff,10px 10px 0 rgba(23,22,29,.32);padding:24px;position:relative;z-index:2">
+
+      <section style="margin-bottom:26px">
+        <p id="profile-loading" style="margin:0;display:flex;align-items:center;gap:10px;font:16px 'MarioUI';color:#8b7a4e">
+          <span style="width:20px;height:20px;background:url('assets/loading.png') 0 0/188px 20px;animation:spin8 .64s steps(8,end) infinite"></span>LOADING PROFILE
+        </p>
+        <div id="profile-card" class="here-card" style="background:#fff" hidden></div>
+      </section>
+
+      <section style="margin-bottom:26px">
+        <h2 style="margin:0 0 4px;font:22px 'MarioUI';color:#17161d;letter-spacing:1px">THE WHOLE LADDER</h2>
+        <p style="margin:0 0 14px;font:15px 'MarioUI';color:#8b7a4e">Segment width is proportional to how much ELO the tier covers.</p>
+        <div id="tier-scale"></div>
+      </section>
+
+      <section>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h2 style="margin:0;font:30px 'MarioUI';color:#17161d;letter-spacing:1px">MATCH HISTORY</h2>
+          <span id="history-summary" style="background:#17161d;color:#fdf3d7;padding:6px 12px;font:15px 'MarioUI'"></span>
+        </div>
+        <div id="history-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      </section>
+
+    </main>
+
+    <p style="margin:18px 0 0;font:15px 'MarioUI';color:#fff;text-shadow:3px 3px 0 #17161d">UNOFFICIAL COMMUNITY PROJECT.</p>
+  </div>
+</div>
+
+<div id="auth-error" hidden></div>
+
+<script src="js/tiers.js"></script>
+<script src="js/countries.js"></script>
+<script src="js/ladder-render.js"></script>
+<script src="js/map-names.js"></script>
+<script src="js/match-detail.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/gate.js"></script>
+<script src="js/user.js"></script>
+</body>
+</html>

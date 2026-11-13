@@ -1,0 +1,16 @@
+# MvLO Ranked
+
+> Unofficial, community-made ranked ladder for MvLO (Mario vs Luigi Online). Tracks ranked 1v1 matches, ELO ratings and a five-tier rank system, with login via Discord.
+
+MvLO Ranked is a fan-run ranked matchmaking system for the MvLO community game. Players log in with Discord, queue for ranked 1v1 matches, and climb a single shared ELO ladder split into five tiers (Mini, Mushroom, Shell, Fireflower, Star), each with three divisions.
+
+## Pages
+
+- [Leaderboard](https://mvloranked.xyz/): Top-players leaderboard, the ranked ruleset, and (once logged in) the viewer's own match history.
+- [Tier Map](https://mvloranked.xyz/tiers.html): Every tier and division on the ladder, and the ELO range each one covers.
+- Player profiles at `https://mvloranked.xyz/user/:id`: a player's rank, ELO rating and recent match history.
+
+## Notes
+
+- This is an unofficial community project and is not affiliated with Nintendo.
+- Full match rules, the rating system and fair-play/account-integrity policies are on the Leaderboard page under its RULES tab.
